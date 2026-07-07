@@ -1,26 +1,144 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+@layer base {
+    body {
+        background-color: #fcf8f2 !important;
+        color: #2c2520;
+        font-family: 'Poppins', sans-serif;
+        line-height: 1.6;
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 40px;
+        background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0);
+        background-size: 24px 24px;
+    }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ==========================================
+   2. TYPOGRAPHY
+   ========================================== */
+h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 2.8rem;
+    text-align: center;
+    letter-spacing: 4px;
+    margin-bottom: 5px;
+    color: #4a3b32;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #705e52;
+    margin-top: 0;
+    margin-bottom: 30px;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+hr {
+    border: none;
+    border-top: 1px solid #dcd1c4;
+    margin: 40px auto;
+    width: 60%;
+}
+
+h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    color: #4a3b32;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+
+/* ==========================================
+   3. FORM LABELS & INPUTS
+   ========================================== */
+label {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #5c4d42;
+}
+
+input[type="email"],
+select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #dcd1c4;
+    border-radius: 4px;
+    background-color: #fffcf9;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    color: #2c2520;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+input[type="email"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #8c7662;
+    box-shadow: 0 0 5px rgba(140, 118, 98, 0.2);
+}
+
+/* ==========================================
+   4. THE DIGITAL LETTER (TEXTAREA)
+   ========================================== */
+textarea {
+    width: 100%;
+    max-width: 100%;
+    min-height: 300px;
+    padding: 30px;
+    border: 1px solid #e6ded4;
+    border-radius: 2px;
+    background-color: #fdfbf7;
+    
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #2c2520;
+    
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+    resize: vertical;
+    transition: box-shadow 0.3s ease, background-color 0.4s ease, font-family 0.4s ease;
+}
+
+textarea:focus {
+    box-shadow: 0 6px 25px rgba(140, 118, 98, 0.12);
+}
+
+/* ==========================================
+   5. BUTTON STYLING
+   ========================================== */
+button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #4a3b32;
+    color: #fcf8f2;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+button:hover {
+    background-color: #635043;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+button:active {
+    transform: translateY(1px);
 }

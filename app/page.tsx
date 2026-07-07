@@ -1,65 +1,163 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export default function Home() {
+  const [recipientEmail, setRecipientEmail] = useState('');
+  const [originatorEmail, setOriginatorEmail] = useState('');
+  const [theme, setTheme] = useState('vintage');
+  const [letterBody, setLetterBody] = useState('');
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        window.location.href = '/sign-in';
+      } else {
+        setUser(session.user);
+        setLoading(false);
+      }
+    };
+    checkUser();
+  }, []);
+
+  const themes: Record<string, { fontFamily: string; backgroundColor: string }> = {
+    vintage: {
+      fontFamily: "'Yellowtail', cursive",
+      backgroundColor: "#fdfbf7"
+    },
+    royal: {
+      fontFamily: "'Monsieur La Doulaise', cursive",
+      backgroundColor: "#f4f0fa"
+    },
+    "love-letter": {
+      fontFamily: "'Playfair Display', serif",
+      backgroundColor: "#fff0f2"
+    },
+    notebook: {
+      fontFamily: "'Poppins', sans-serif",
+      backgroundColor: "#f0f7ff"
+    }
+  };
+
+  const saveLetter = async () => {
+    try {
+      const response = await fetch("/api/letters", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: "Untitled Letter",
+          content: letterBody,
+          recipient_email: recipientEmail,
+          originator_email: originatorEmail,
+          theme: theme,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error);
+      }
+
+      alert("Letter sent successfully!");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to save letter.");
+    }
+  };
+
+  if (loading) return <p style={{ textAlign: 'center', marginTop: '100px' }}>Loading...</p>;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', minHeight: '100vh' }} className="your-original-container-class">
+     <h1>Letters</h1>
+<p>Bring back the art of letter writing.</p>
+<a
+  href="/my-letters"
+  style={{
+    display: 'inline-block',
+    marginBottom: '10px',
+    color: '#8c7662',
+    textDecoration: 'underline',
+    cursor: 'pointer',
+  }}
+>
+  View My Letters →
+</a>
+<hr />
+
+      <h2>Create</h2>
+
+      <label style={{ display: 'block', marginTop: '10px' }}>Recipient Email</label>
+      <input
+        type="email"
+        id="recipientEmail"
+        value={recipientEmail}
+        onChange={(e) => setRecipientEmail(e.target.value)}
+      />
+
+      <label style={{ display: 'block', marginTop: '10px' }}>Originator Email</label>
+      <input
+        type="email"
+        id="originatorEmail"
+        value={originatorEmail}
+        onChange={(e) => setOriginatorEmail(e.target.value)}
+      />
+
+      <br /><br />
+
+      <label style={{ display: 'block' }}>Please select a theme</label>
+      <select
+        id="themeSelect"
+        value={theme}
+        onChange={(e) => setTheme(e.target.value)}
+      >
+        <option value="vintage">Vintage</option>
+        <option value="royal">Royal</option>
+        <option value="love-letter">Love Letter</option>
+        <option value="notebook">Notebook</option>
+      </select>
+
+      <br /><br />
+
+      <textarea
+        id="letterBody"
+        rows={12}
+        cols={60}
+        value={letterBody}
+        onChange={(e) => setLetterBody(e.target.value)}
+        style={{
+          fontFamily: themes[theme].fontFamily,
+          backgroundColor: themes[theme].backgroundColor,
+          width: '100%',
+          padding: '15px',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          transition: 'all 0.3s ease'
+        }}
+      ></textarea>
+
+      <br /><br />
+
+      <button onClick={saveLetter}>
+        Send Letter
+      </button>
+
+      <button
+        onClick={async () => {
+          await supabase.auth.signOut();
+          window.location.href = '/sign-in';
+        }}
+        style={{ backgroundColor: '#888', marginTop: '10px' }}
+      >
+        Sign Out
+      </button>
     </div>
   );
 }
