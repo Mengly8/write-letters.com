@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
@@ -13,7 +12,6 @@ export default function SignIn() {
   const handleEmailAuth = async () => {
     setLoading(true);
     setMessage('');
-
     if (isSignUp) {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) {
@@ -36,7 +34,7 @@ export default function SignIn() {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `http://localhost:3000/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
   };
@@ -46,16 +44,13 @@ export default function SignIn() {
       <h1>Letters</h1>
       <p>Bring back the art of letter writing.</p>
       <hr />
-
       <h2>{isSignUp ? 'Create Account' : 'Sign In'}</h2>
-
       <label>Email</label>
       <input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-
       <label style={{ marginTop: '10px' }}>Password</label>
       <input
         type="password"
@@ -72,27 +67,20 @@ export default function SignIn() {
           boxSizing: 'border-box',
         }}
       />
-
       {message && (
         <p style={{ color: message.includes('Check') ? 'green' : 'red', marginTop: '10px' }}>
           {message}
         </p>
       )}
-
       <br />
-
       <button onClick={handleEmailAuth} disabled={loading}>
         {loading ? 'Please wait...' : isSignUp ? 'Create Account' : 'Sign In'}
       </button>
-
       <br /><br />
-
       <button onClick={handleGoogleSignIn} style={{ backgroundColor: '#4285f4' }}>
         Continue with Google
       </button>
-
       <br /><br />
-
       <p>
         {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
         <span
