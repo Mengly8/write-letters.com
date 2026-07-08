@@ -16,12 +16,12 @@ export const metadata: Metadata = {
   title: "Letters — Bring back the art of letter writing",
   description:
     "Write and send beautifully themed digital letters via email. Vintage, royal, love letter, and notebook styles — rediscover the art of letter writing.",
-  metadataBase: new URL("https://write-letters.com"),
+  metadataBase: new URL("https://www.write-letters.com"),
   openGraph: {
     title: "Letters — Bring back the art of letter writing",
     description:
       "Write and send beautifully themed digital letters via email.",
-    url: "https://write-letters.com",
+    url: "https://www.write-letters.com",
     siteName: "Letters",
     images: ["/og-image.png"],
     type: "website",

@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/my-letters"],
     },
-    sitemap: "https://write-letters.com/sitemap.xml",
+    sitemap: "https://www.write-letters.com/sitemap.xml",
   };
 }
