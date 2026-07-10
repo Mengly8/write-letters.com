@@ -7,6 +7,7 @@ export default function Home() {
   const [recipientEmail, setRecipientEmail] = useState('');
   const [originatorEmail, setOriginatorEmail] = useState('');
   const [theme, setTheme] = useState('vintage');
+  const [letterTitle, setLetterTitle] = useState('');
   const [letterBody, setLetterBody] = useState('');
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -43,6 +44,18 @@ export default function Home() {
     }
   };
 
+  // Falls back to the first few words of the letter body if no title was given
+  const resolveTitle = () => {
+    const trimmedTitle = letterTitle.trim();
+    if (trimmedTitle) return trimmedTitle;
+
+    const trimmedBody = letterBody.trim();
+    if (!trimmedBody) return 'Untitled Letter';
+
+    const words = trimmedBody.split(/\s+/).slice(0, 6).join(' ');
+    return words.length < trimmedBody.length ? `${words}…` : words;
+  };
+
   const saveLetter = async () => {
     try {
       const response = await fetch("/api/letters", {
@@ -51,7 +64,7 @@ export default function Home() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title: "Untitled Letter",
+          title: resolveTitle(),
           content: letterBody,
           recipient_email: recipientEmail,
           originator_email: originatorEmail,
@@ -93,6 +106,16 @@ export default function Home() {
 <hr />
 
       <h2>Create</h2>
+
+      <label style={{ display: 'block', marginTop: '10px' }}>Title (optional)</label>
+      <input
+        type="text"
+        id="letterTitle"
+        placeholder="e.g. A note for you"
+        value={letterTitle}
+        onChange={(e) => setLetterTitle(e.target.value)}
+        style={{ width: '100%' }}
+      />
 
       <label style={{ display: 'block', marginTop: '10px' }}>Recipient Email</label>
       <input
